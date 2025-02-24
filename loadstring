@@ -2,13 +2,15 @@ local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/jens
 local player = game.Players.LocalPlayer
 local itemsFolder = game.Workspace:WaitForChild("Items")
 local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
 
 local window = OrionLib:MakeWindow({Name = "Spider-Karu-OP-Hub", HidePremium = false})
 local teleportTab = window:MakeTab({Name = "Teleport", Icon = "rbxassetid://6031075938"})
-local playerTab = window:MakeTab({Name = "Player", Icon = "rbxassetid://6031075938"}) -- Renamed from Misc
+local playerTab = window:MakeTab({Name = "Player", Icon = "rbxassetid://6031075938"})
 local autoFarmTab = window:MakeTab({Name = "AutoFarm", Icon = "rbxassetid://6031075938"})
-local otherTab = window:MakeTab({Name = "Other", Icon = "rbxassetid://6031075938"}) -- New section
+local otherTab = window:MakeTab({Name = "Other", Icon = "rbxassetid://6031075938"})
 
+-- Function to update teleport dropdown
 local function updateDropdown()
     local items = {}
     for _, item in pairs(itemsFolder:GetChildren()) do
@@ -31,6 +33,7 @@ local function enableNoClip()
     end
 end
 
+-- Teleport dropdown
 teleportTab:AddDropdown({
     Name = "Select Item to Teleport",
     Default = "None",
@@ -44,6 +47,7 @@ teleportTab:AddDropdown({
     end
 })
 
+-- Teleport locations
 local teleportLocations = {
     {Name = "Exit", Position = CFrame.new(500, 60, 90)},
     {Name = "Bunker", Position = CFrame.new(571, 44, 78)},
@@ -62,21 +66,21 @@ for _, location in pairs(teleportLocations) do
     })
 end
 
--- ESP Toggle
+-- ESP toggle
 local espEnabled = false
 local function highlightPlayers()
     for _, targetPlayer in ipairs(Players:GetPlayers()) do
-        local oldHighlight = targetPlayer.Character:FindFirstChild("Highlight")
-        if oldHighlight then oldHighlight:Destroy() end
+        local oldHighlight = targetPlayer.Character and targetPlayer.Character:FindFirstChild("Highlight")
+        if oldHighlight then
+            oldHighlight:Destroy()
+        end
     end
-
     if espEnabled then
         for _, targetPlayer in ipairs(Players:GetPlayers()) do
             if targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
                 local highlight = Instance.new("Highlight")
                 highlight.Parent = targetPlayer.Character
                 highlight.Name = "Highlight"
-                highlight.Adornee = targetPlayer.Character
                 highlight.FillColor = Color3.fromRGB(255, 255, 0)
                 highlight.FillTransparency = 0.5
                 highlight.OutlineTransparency = 0.5
@@ -95,7 +99,7 @@ playerTab:AddToggle({
     end
 })
 
--- WalkSpeed and JumpPower
+-- WalkSpeed slider
 playerTab:AddSlider({
     Name = "WalkSpeed",
     Min = 0,
@@ -109,6 +113,7 @@ playerTab:AddSlider({
     end
 })
 
+-- JumpPower slider
 playerTab:AddSlider({
     Name = "JumpPower",
     Min = 0,
@@ -122,20 +127,20 @@ playerTab:AddSlider({
     end
 })
 
--- Anti-AFK
+-- Anti-AFK button
 playerTab:AddButton({
     Name = "Anti-AFK",
     Callback = function()
         spawn(function()
             while true do
-                player.Character:FindFirstChild("HumanoidRootPart").CFrame = player.Character:FindFirstChild("HumanoidRootPart").CFrame
+                game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame
                 wait(60)
             end
         end)
     end
 })
 
--- AutoFarm
+-- AutoFarm toggle
 local autoFarmEnabled = false
 local duration = 8
 local function teleportInside(targetPlayer)
@@ -166,6 +171,7 @@ autoFarmTab:AddToggle({
     end
 })
 
+-- Kill all (Spider) button
 autoFarmTab:AddButton({
     Name = "Kill all (Spider)",
     Callback = function()
@@ -197,6 +203,34 @@ otherTab:AddButton({
     Name = "SimpleSpy",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/78n/SimpleSpy/main/SimpleSpySource.lua"))()
+    end
+})
+
+-- Add text label in "Other" tab
+otherTab:AddParagraph("About This Exploit", "I made this Roblox exploit from scratch, spending a lot of time to ensure smooth performance and reliability. Subscribe to my YouTube and join the Discord for updates and more!🔥")
+
+-- Copy buttons
+otherTab:AddButton({
+    Name = "Copy Discord Link",
+    Callback = function()
+        setclipboard("https://discord.gg/HKufewZM7v")
+        OrionLib:MakeNotification({
+            Name = "Copied!",
+            Content = "Discord link copied to clipboard.",
+            Time = 3
+        })
+    end
+})
+
+otherTab:AddButton({
+    Name = "Copy YouTube Link",
+    Callback = function()
+        setclipboard("https://www.youtube.com/@GD_Karu99YT_music")
+        OrionLib:MakeNotification({
+            Name = "Copied!",
+            Content = "YouTube link copied to clipboard.",
+            Time = 3
+        })
     end
 })
 
