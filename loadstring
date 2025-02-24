@@ -128,4 +128,13 @@ autoFarmTab:AddCheckbox({
     end
 })
 
+-- Adding a general toggle (Checkbox example)
+miscTab:AddToggle({
+    Name = "This is a checkbox toggle!",
+    Default = false,  -- Default value is false (unchecked)
+    Callback = function(Value)
+        print("Checkbox state is now: " .. tostring(Value))
+    end    
+})
+
 window:Toggle()
