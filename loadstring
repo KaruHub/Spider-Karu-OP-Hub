@@ -1,0 +1,71 @@
+local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/jensonhirst/Orion/main/source'))()
+local player = game.Players.LocalPlayer
+local itemsFolder = game.Workspace:WaitForChild("Items")
+
+local window = OrionLib:MakeWindow({Name = "Teleport Menu", HidePremium = false})
+local Tab = window:MakeTab({Name = "Teleport", Icon = "rbxassetid://6031075938"})
+
+local function updateDropdown()
+    local items = {}
+    for _, item in pairs(itemsFolder:GetChildren()) do
+        if item:IsA("Model") and item.PrimaryPart then
+            table.insert(items, item.Name)
+        end
+    end
+    return items
+end
+
+-- Function to enable no-clip
+local function enableNoClip()
+    local character = player.Character
+    if character then
+        for _, part in pairs(character:GetChildren()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = false
+            end
+        end
+    end
+end
+
+Tab:AddDropdown({
+    Name = "Select Item to Teleport",
+    Default = "None",
+    Options = updateDropdown(),
+    Callback = function(Value)
+        local item = itemsFolder:FindFirstChild(Value)
+        if item and item.PrimaryPart then
+            enableNoClip()  -- Enable no-clip before teleporting
+            player.Character:SetPrimaryPartCFrame(item.PrimaryPart.CFrame)
+        end
+    end
+})
+
+-- Teleport buttons for specified locations
+local teleportLocations = {
+    {Name = "Exit", Position = CFrame.new(492, 62, 152)},
+    {Name = "Bunker", Position = CFrame.new(571, 44, 78)},
+    {Name = "Outside Cabin", Position = CFrame.new(443, 62, 69)},
+    {Name = "Spawn", Position = CFrame.new(520, 63, -63)},
+    {Name = "Roof", Position = CFrame.new(510, 7, 98)},
+    {Name = "Staircase", Position = CFrame.new(531, 72, 1)},
+    {Name = "Safe Place", Position = CFrame.new(506, 63, 118)}
+}
+
+for _, location in pairs(teleportLocations) do
+    Tab:AddButton({
+        Name = "Teleport to " .. location.Name,
+        Callback = function()
+            player.Character:SetPrimaryPartCFrame(location.Position)
+        end
+    })
+end
+
+itemsFolder.ChildAdded:Connect(function()
+    Tab:UpdateDropdown("Select Item to Teleport", updateDropdown())
+end)
+
+itemsFolder.ChildRemoved:Connect(function()
+    Tab:UpdateDropdown("Select Item to Teleport", updateDropdown())
+end)
+
+window:Toggle()
