@@ -46,7 +46,7 @@ local teleportLocations = {
     {Name = "Bunker", Position = CFrame.new(571, 44, 78)},
     {Name = "Outside Cabin", Position = CFrame.new(443, 62, 69)},
     {Name = "Spawn", Position = CFrame.new(520, 63, -63)},
-    {Name = "Roof", Position = CFrame.new(510, 7, 98, 0, 0, 0, 0, 0, 0)},  -- Roof with zero orientation
+    {Name = "Roof", Position = CFrame.new(510, 7, 98)},  -- Roof corrected
     {Name = "Staircase", Position = CFrame.new(531, 72, 1)},
     {Name = "Safe Place", Position = CFrame.new(506, 63, 118)}
 }
