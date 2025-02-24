@@ -1,9 +1,13 @@
 local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/jensonhirst/Orion/main/source'))()
 local player = game.Players.LocalPlayer
 local itemsFolder = game.Workspace:WaitForChild("Items")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
 
 local window = OrionLib:MakeWindow({Name = "Spider-Karu-OP-Hub", HidePremium = false})
-local Tab = window:MakeTab({Name = "Teleport", Icon = "rbxassetid://6031075938"})
+local teleportTab = window:MakeTab({Name = "Teleport", Icon = "rbxassetid://6031075938"})
+local miscTab = window:MakeTab({Name = "Misc", Icon = "rbxassetid://6031075938"})
+local autoFarmTab = window:MakeTab({Name = "AutoFarm", Icon = "rbxassetid://6031075938"})
 
 local function updateDropdown()
     local items = {}
@@ -27,7 +31,7 @@ local function enableNoClip()
     end
 end
 
-Tab:AddDropdown({
+teleportTab:AddDropdown({
     Name = "Select Item to Teleport",
     Default = "None",
     Options = updateDropdown(),
@@ -40,7 +44,7 @@ Tab:AddDropdown({
     end
 })
 
--- Teleport buttons for specified locations (Roof button removed)
+-- Teleport buttons for specified locations
 local teleportLocations = {
     {Name = "Exit", Position = CFrame.new(500, 60, 90)},
     {Name = "Bunker", Position = CFrame.new(571, 44, 78)},
@@ -51,7 +55,7 @@ local teleportLocations = {
 }
 
 for _, location in pairs(teleportLocations) do
-    Tab:AddButton({
+    teleportTab:AddButton({
         Name = "Teleport to " .. location.Name,
         Callback = function()
             player.Character:SetPrimaryPartCFrame(location.Position)
@@ -59,12 +63,69 @@ for _, location in pairs(teleportLocations) do
     })
 end
 
-itemsFolder.ChildAdded:Connect(function()
-    Tab:UpdateDropdown("Select Item to Teleport", updateDropdown())
-end)
+-- ESP toggle
+local espEnabled = false
+local function highlightPlayers()
+    if espEnabled then
+        for _, targetPlayer in ipairs(Players:GetPlayers()) do
+            if targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local oldHighlight = targetPlayer.Character:FindFirstChild("Highlight")
+                if oldHighlight then
+                    oldHighlight:Destroy()
+                end
 
-itemsFolder.ChildRemoved:Connect(function()
-    Tab:UpdateDropdown("Select Item to Teleport", updateDropdown())
-end)
+                local highlight = Instance.new("Highlight")
+                highlight.Parent = targetPlayer.Character
+                highlight.Name = "Highlight"
+                highlight.Adornee = targetPlayer.Character
+                highlight.FillColor = Color3.fromRGB(255, 255, 0)
+                highlight.FillTransparency = 0.5
+                highlight.OutlineTransparency = 0.5
+                highlight.Enabled = true
+            end
+        end
+    end
+end
+
+miscTab:AddCheckbox({
+    Name = "ESP",
+    Default = false,
+    Callback = function(Value)
+        espEnabled = Value
+        highlightPlayers()
+    end
+})
+
+-- AutoFarm script with toggle
+local autoFarmEnabled = false
+local duration = 8  -- Time in seconds to stay inside each player
+local function teleportInside(targetPlayer)
+    local targetCharacter = targetPlayer.Character
+    if targetCharacter and targetCharacter:FindFirstChild("HumanoidRootPart") then
+        local targetHRP = targetCharacter:WaitForChild("HumanoidRootPart")
+        player.Character.HumanoidRootPart.CFrame = targetHRP.CFrame
+    end
+end
+
+autoFarmTab:AddCheckbox({
+    Name = "Enable AutoFarm",
+    Default = false,
+    Callback = function(Value)
+        autoFarmEnabled = Value
+        if autoFarmEnabled then
+            -- Start AutoFarm loop
+            spawn(function()
+                while autoFarmEnabled do
+                    for _, targetPlayer in ipairs(Players:GetPlayers()) do
+                        if targetPlayer ~= player and targetPlayer.Character then
+                            teleportInside(targetPlayer)
+                            wait(duration)
+                        end
+                    end
+                end
+            end)
+        end
+    end
+})
 
 window:Toggle()
