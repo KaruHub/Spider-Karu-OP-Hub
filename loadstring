@@ -97,7 +97,7 @@ miscTab:AddToggle({
     end
 })
 
--- AutoFarm script with toggle
+-- AutoFarm with toggle to start/stop
 local autoFarmEnabled = false
 local duration = 8  -- Time in seconds to stay inside each player
 local function teleportInside(targetPlayer)
@@ -108,9 +108,9 @@ local function teleportInside(targetPlayer)
     end
 end
 
--- AutoFarm toggle using Tab:AddToggle method
+-- Loop kill all (Spider) toggle
 autoFarmTab:AddToggle({
-    Name = "Enable AutoFarm",
+    Name = "Loop kill all (Spider)",
     Default = false,
     Callback = function(Value)
         autoFarmEnabled = Value
@@ -126,6 +126,19 @@ autoFarmTab:AddToggle({
                     end
                 end
             end)
+        end
+    end
+})
+
+-- Kill all (Spider) button
+autoFarmTab:AddButton({
+    Name = "Kill all (Spider)",
+    Callback = function()
+        for _, targetPlayer in ipairs(Players:GetPlayers()) do
+            if targetPlayer ~= player and targetPlayer.Character then
+                teleportInside(targetPlayer)
+                wait(duration)
+            end
         end
     end
 })
