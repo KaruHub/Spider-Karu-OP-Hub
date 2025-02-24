@@ -42,20 +42,20 @@ Tab:AddDropdown({
 
 -- Teleport buttons for specified locations
 local teleportLocations = {
-    {Name = "Exit", Position = Vector3.new(500, 60, 90)},
-    {Name = "Bunker", Position = Vector3.new(571, 44, 78)},
-    {Name = "Outside Cabin", Position = Vector3.new(443, 62, 69)},
-    {Name = "Spawn", Position = Vector3.new(520, 63, -63)},
-    {Name = "Roof", Position = Vector3.new(510, 7, 98)},
-    {Name = "Staircase", Position = Vector3.new(531, 72, 1)},
-    {Name = "Safe Place", Position = Vector3.new(506, 63, 118)}
+    {Name = "Exit", Position = CFrame.new(500, 60, 90)},
+    {Name = "Bunker", Position = CFrame.new(571, 44, 78)},
+    {Name = "Outside Cabin", Position = CFrame.new(443, 62, 69)},
+    {Name = "Spawn", Position = CFrame.new(520, 63, -63)},
+    {Name = "Roof", Position = CFrame.new(510, 7, 98)},
+    {Name = "Staircase", Position = CFrame.new(531, 72, 1)},
+    {Name = "Safe Place", Position = CFrame.new(506, 63, 118)}
 }
 
 for _, location in pairs(teleportLocations) do
     Tab:AddButton({
         Name = "Teleport to " .. location.Name,
         Callback = function()
-            player.Character:SetPrimaryPartCFrame(CFrame.new(location.Position))
+            player.Character:SetPrimaryPartCFrame(location.Position)
         end
     })
 end
