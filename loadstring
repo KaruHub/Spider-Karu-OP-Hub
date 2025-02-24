@@ -97,6 +97,42 @@ miscTab:AddToggle({
     end
 })
 
+-- WalkSpeed slider
+miscTab:AddSlider({
+    Name = "WalkSpeed",
+    Min = 16,  -- Default walk speed
+    Max = 500,  -- Max walk speed
+    Default = 16,
+    Callback = function(Value)
+        player.Character:WaitForChild("Humanoid").WalkSpeed = Value
+    end
+})
+
+-- JumpPower slider
+miscTab:AddSlider({
+    Name = "JumpPower",
+    Min = 50,  -- Default jump power
+    Max = 500,  -- Max jump power
+    Default = 50,
+    Callback = function(Value)
+        player.Character:WaitForChild("Humanoid").JumpPower = Value
+    end
+})
+
+-- Anti-AFK button
+miscTab:AddButton({
+    Name = "Anti-AFK",
+    Callback = function()
+        spawn(function()
+            while true do
+                -- Keep the character from being idle
+                game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame
+                wait(60)  -- Keeps the player active every 60 seconds
+            end
+        end)
+    end
+})
+
 -- AutoFarm with toggle to start/stop
 local autoFarmEnabled = false
 local duration = 8  -- Time in seconds to stay inside each player
@@ -141,15 +177,6 @@ autoFarmTab:AddButton({
             end
         end
     end
-})
-
--- Adding a general toggle (Checkbox example using Tab:AddToggle)
-miscTab:AddToggle({
-    Name = "This is a checkbox toggle!",
-    Default = false,  -- Default value is false (unchecked)
-    Callback = function(Value)
-        print("Checkbox state is now: " .. tostring(Value))
-    end    
 })
 
 window:Toggle()
