@@ -87,7 +87,8 @@ local function highlightPlayers()
     end
 end
 
-miscTab:AddCheckbox({
+-- ESP toggle using Tab:AddToggle method
+miscTab:AddToggle({
     Name = "ESP",
     Default = false,
     Callback = function(Value)
@@ -107,7 +108,8 @@ local function teleportInside(targetPlayer)
     end
 end
 
-autoFarmTab:AddCheckbox({
+-- AutoFarm toggle using Tab:AddToggle method
+autoFarmTab:AddToggle({
     Name = "Enable AutoFarm",
     Default = false,
     Callback = function(Value)
@@ -128,7 +130,7 @@ autoFarmTab:AddCheckbox({
     end
 })
 
--- Adding a general toggle (Checkbox example)
+-- Adding a general toggle (Checkbox example using Tab:AddToggle)
 miscTab:AddToggle({
     Name = "This is a checkbox toggle!",
     Default = false,  -- Default value is false (unchecked)
