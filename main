@@ -1,4 +1,11 @@
-local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/jensonhirst/Orion/main/source'))()
+local success, OrionLib = pcall(function()
+    return loadstring(game:HttpGet('https://raw.githubusercontent.com/jensonhirst/Orion/main/source'))()
+end)
+
+if not success then
+    print("Error loading OrionLib: " .. OrionLib)
+    return
+end
 
 -- Create the main window
 local Window = OrionLib:MakeWindow({Name = "Key System", HideUI = true})
