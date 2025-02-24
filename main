@@ -1,56 +1,75 @@
-local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/jensonhirst/Orion/main/source'))()
+-- Load the latest version of the Orion library
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 
--- Create the main window
+local correctKey = "KaruSpider!1"
+local keyLink = "https://loot-link.com/s?P4yhC4Pp"  -- The key link
+
+-- Create the key input GUI using Orion
 local Window = OrionLib:MakeWindow({
     Name = "Key System",
-    HidePremium = false,  -- Show premium status (set false to display everything)
-    SaveConfig = true,
-    ConfigFolder = "OrionTest",
-    IntroEnabled = false  -- Disable the intro animation so the UI shows immediately
+    HidePremium = false,
+    IntroEnabled = false,
 })
 
--- Create the 'Enter Key' tab
-local KeyTab = Window:MakeTab({
+-- Key input function
+local function checkKeyInput(input)
+    if input == correctKey then
+        -- Execute the code after successful key entry
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/KaruHub/Spider-Karu-OP-Hub/refs/heads/main/loadstring"))()
+        OrionLib:MakeNotification({
+            Name = "Success",
+            Content = "Correct key entered! Code has been executed.",
+            Image = "rbxassetid://6031075938",
+            Time = 3
+        })
+    else
+        -- Notify user if the key is incorrect
+        OrionLib:MakeNotification({
+            Name = "Error",
+            Content = "Incorrect key entered. Please try again.",
+            Image = "rbxassetid://6031075938",
+            Time = 3
+        })
+    end
+end
+
+-- Create the key input section
+local Tab = Window:MakeTab({
     Name = "Enter Key",
-    Icon = "rbxassetid://13719397858",
+    Icon = "rbxassetid://6031075938",
     PremiumOnly = false
 })
 
--- Create the key input textbox
-local KeyTextbox = KeyTab:AddTextbox({
-    Name = "Enter Key Here",
+Tab:AddTextbox({
+    Name = "Key Input",
     Default = "",
     TextDisappear = true,
-    Callback = function(Value)
-        -- You can add code here if you want something to happen when the text changes.
+    Callback = function(value)
+        checkKeyInput(value)
     end
 })
 
--- Create the submit button
-KeyTab:AddButton({
-    Name = "Submit",
+-- Optional: Add a button to submit
+Tab:AddButton({
+    Name = "Submit Key",
     Callback = function()
-        local enteredKey = KeyTextbox.Text  -- Get the text from the textbox
-        if enteredKey == "KaruSpider!1" then
-            -- Correct key entered
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/KaruHub/Spider-Karu-OP-Hub/refs/heads/main/loadstring"))()
-            OrionLib:MakeNotification({
-                Name = "Success",
-                Content = "Key correct, loading script...",
-                Image = "rbxassetid://13719397858",
-                Time = 5
-            })
-        else
-            -- Incorrect key entered
-            OrionLib:MakeNotification({
-                Name = "Error",
-                Content = "Incorrect key! Try again.",
-                Image = "rbxassetid://13719397858",
-                Time = 5
-            })
-        end
+        local value = Tab:GetTextbox("Key Input")
+        checkKeyInput(value)
     end
 })
 
--- Finalize the UI
+-- Button to copy the key link
+Tab:AddButton({
+    Name = "Copy Key Link",
+    Callback = function()
+        setclipboard(keyLink)  -- Copy the link to clipboard
+        OrionLib:MakeNotification({
+            Name = "Link Copied",
+            Content = "The key link has been copied to your clipboard!",
+            Image = "rbxassetid://6031075938",
+            Time = 3
+        })
+    end
+})
+
 OrionLib:Init()
