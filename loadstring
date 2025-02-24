@@ -66,14 +66,18 @@ end
 -- ESP toggle
 local espEnabled = false
 local function highlightPlayers()
+    -- Remove old highlights when ESP is toggled off
+    for _, targetPlayer in ipairs(Players:GetPlayers()) do
+        local oldHighlight = targetPlayer.Character:FindFirstChild("Highlight")
+        if oldHighlight then
+            oldHighlight:Destroy()
+        end
+    end
+
+    -- Add new highlights if ESP is enabled
     if espEnabled then
         for _, targetPlayer in ipairs(Players:GetPlayers()) do
             if targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                local oldHighlight = targetPlayer.Character:FindFirstChild("Highlight")
-                if oldHighlight then
-                    oldHighlight:Destroy()
-                end
-
                 local highlight = Instance.new("Highlight")
                 highlight.Parent = targetPlayer.Character
                 highlight.Name = "Highlight"
@@ -100,9 +104,12 @@ miscTab:AddToggle({
 -- WalkSpeed slider
 miscTab:AddSlider({
     Name = "WalkSpeed",
-    Min = 16,  -- Default walk speed
-    Max = 500,  -- Max walk speed
+    Min = 0,
+    Max = 1000,
     Default = 16,
+    Color = Color3.fromRGB(255, 255, 255),
+    Increment = 1,
+    ValueName = "WalkSpeed",
     Callback = function(Value)
         player.Character:WaitForChild("Humanoid").WalkSpeed = Value
     end
@@ -111,9 +118,12 @@ miscTab:AddSlider({
 -- JumpPower slider
 miscTab:AddSlider({
     Name = "JumpPower",
-    Min = 50,  -- Default jump power
-    Max = 500,  -- Max jump power
+    Min = 0,
+    Max = 1000,
     Default = 50,
+    Color = Color3.fromRGB(255, 255, 255),
+    Increment = 1,
+    ValueName = "JumpPower",
     Callback = function(Value)
         player.Character:WaitForChild("Humanoid").JumpPower = Value
     end
@@ -125,9 +135,9 @@ miscTab:AddButton({
     Callback = function()
         spawn(function()
             while true do
-                -- Keep the character from being idle
+                -- Keeps the player active every 60 seconds
                 game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame
-                wait(60)  -- Keeps the player active every 60 seconds
+                wait(60)
             end
         end)
     end
