@@ -1,61 +1,60 @@
 local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/jensonhirst/Orion/main/source'))()
 
 -- Create the main window
-local Window = OrionLib:MakeWindow({Name = "Key System", HideUI = false})  -- Changed HideUI to false so the UI is visible
+local Window = OrionLib:MakeWindow({
+    Name = "Key System",
+    HidePremium = false,  -- Makes the UI visible for all users, not just premium
+    SaveConfig = true,
+    ConfigFolder = "OrionTest"
+})
 
--- Create the key input frame
+-- Create the key input tab
 local KeyTab = Window:MakeTab({
     Name = "Enter Key",
     Icon = "rbxassetid://13719397858",
     PremiumOnly = false
 })
 
--- Create the key input frame within the tab
-local KeyFrame = Instance.new("Frame")
-KeyFrame.Parent = KeyTab.Content
-KeyFrame.Size = UDim2.new(0, 400, 0, 150)
-KeyFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+-- Create the key input section within the tab
+local KeySection = KeyTab:AddSection({
+    Name = "Key Input"
+})
 
 -- Create the key input textbox
-local KeyTextbox = Instance.new("TextBox")
-KeyTextbox.Parent = KeyFrame
-KeyTextbox.Size = UDim2.new(0, 300, 0, 50)
-KeyTextbox.Position = UDim2.new(0, 50, 0, 50)
-KeyTextbox.PlaceholderText = "Enter Key Here"
-KeyTextbox.TextSize = 18
-KeyTextbox.TextColor3 = Color3.fromRGB(255, 255, 255)
-KeyTextbox.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-KeyTextbox.ClearTextOnFocus = true
+local KeyTextbox = KeyTab:AddTextbox({
+    Name = "Enter Key Here",
+    Default = "",
+    TextDisappear = true,
+    Callback = function(Value)
+        -- This function runs when the text in the textbox changes
+    end
+})
 
 -- Create the submit button
-local SubmitButton = Instance.new("TextButton")
-SubmitButton.Parent = KeyFrame
-SubmitButton.Size = UDim2.new(0, 150, 0, 50)
-SubmitButton.Position = UDim2.new(0, 125, 0, 110)
-SubmitButton.Text = "Submit"
-SubmitButton.TextSize = 18
-SubmitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-SubmitButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-
--- Button click event
-SubmitButton.MouseButton1Click:Connect(function()
-    local enteredKey = KeyTextbox.Text
-    if enteredKey == "KaruSpider!1" then
-        -- Execute the loadstring if key is correct
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/KaruHub/Spider-Karu-OP-Hub/refs/heads/main/loadstring"))()
-        OrionLib:MakeNotification({
-            Name = "Success",
-            Content = "Key correct, loading script...",
-            Image = "rbxassetid://13719397858",
-            Time = 5
-        })
-    else
-        -- Show an error message if key is incorrect
-        OrionLib:MakeNotification({
-            Name = "Error",
-            Content = "Incorrect key! Try again.",
-            Image = "rbxassetid://13719397858",
-            Time = 5
-        })
+KeyTab:AddButton({
+    Name = "Submit",
+    Callback = function()
+        local enteredKey = KeyTextbox.Text
+        if enteredKey == "KaruSpider!1" then
+            -- Execute the loadstring if key is correct
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/KaruHub/Spider-Karu-OP-Hub/refs/heads/main/loadstring"))()
+            OrionLib:MakeNotification({
+                Name = "Success",
+                Content = "Key correct, loading script...",
+                Image = "rbxassetid://13719397858",
+                Time = 5
+            })
+        else
+            -- Show an error message if key is incorrect
+            OrionLib:MakeNotification({
+                Name = "Error",
+                Content = "Incorrect key! Try again.",
+                Image = "rbxassetid://13719397858",
+                Time = 5
+            })
+        end
     end
-end)
+})
+
+-- Initialize the OrionLib UI
+OrionLib:Init()
