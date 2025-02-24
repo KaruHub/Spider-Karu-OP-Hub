@@ -1,19 +1,20 @@
-local success, OrionLib = pcall(function()
-    return loadstring(game:HttpGet('https://raw.githubusercontent.com/jensonhirst/Orion/main/source'))()
-end)
-
-if not success then
-    print("Error loading OrionLib: " .. OrionLib)
-    return
-end
+local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/jensonhirst/Orion/main/source'))()
 
 -- Create the main window
-local Window = OrionLib:MakeWindow({Name = "Key System", HideUI = true})
+local Window = OrionLib:MakeWindow({Name = "Key System", HideUI = false})  -- Changed HideUI to false so the UI is visible
 
 -- Create the key input frame
+local KeyTab = Window:MakeTab({
+    Name = "Enter Key",
+    Icon = "rbxassetid://13719397858",
+    PremiumOnly = false
+})
+
+-- Create the key input frame within the tab
 local KeyFrame = Instance.new("Frame")
-KeyFrame.Parent = Window:MakeTab({Name = "Enter Key", Icon = "rbxassetid://13719397858", PremiumOnly = false}).Content
+KeyFrame.Parent = KeyTab.Content
 KeyFrame.Size = UDim2.new(0, 400, 0, 150)
+KeyFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 
 -- Create the key input textbox
 local KeyTextbox = Instance.new("TextBox")
