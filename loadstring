@@ -6,8 +6,9 @@ local RunService = game:GetService("RunService")
 
 local window = OrionLib:MakeWindow({Name = "Spider-Karu-OP-Hub", HidePremium = false})
 local teleportTab = window:MakeTab({Name = "Teleport", Icon = "rbxassetid://6031075938"})
-local miscTab = window:MakeTab({Name = "Misc", Icon = "rbxassetid://6031075938"})
+local playerTab = window:MakeTab({Name = "Player", Icon = "rbxassetid://6031075938"})
 local autoFarmTab = window:MakeTab({Name = "AutoFarm", Icon = "rbxassetid://6031075938"})
+local otherTab = window:MakeTab({Name = "Other", Icon = "rbxassetid://6031075938"})
 
 local function updateDropdown()
     local items = {}
@@ -18,20 +19,6 @@ local function updateDropdown()
     end
     return items
 end
-
--- Create the dropdown menu once, no updates needed
-teleportTab:AddDropdown({
-    Name = "Select Item to Teleport",
-    Default = "None",
-    Options = updateDropdown(),
-    Callback = function(Value)
-        local item = itemsFolder:FindFirstChild(Value)
-        if item and item.PrimaryPart then
-            enableNoClip()  -- Enable no-clip before teleporting
-            player.Character:SetPrimaryPartCFrame(item.PrimaryPart.CFrame)
-        end
-    end
-})
 
 -- Function to enable no-clip
 local function enableNoClip()
@@ -44,6 +31,19 @@ local function enableNoClip()
         end
     end
 end
+
+teleportTab:AddDropdown({
+    Name = "Select Item to Teleport",
+    Default = "None",
+    Options = updateDropdown(),
+    Callback = function(Value)
+        local item = itemsFolder:FindFirstChild(Value)
+        if item and item.PrimaryPart then
+            enableNoClip()  -- Enable no-clip before teleporting
+            player.Character:SetPrimaryPartCFrame(item.PrimaryPart.CFrame)
+        end
+    end
+})
 
 -- Teleport buttons for specified locations
 local teleportLocations = {
@@ -93,7 +93,7 @@ local function highlightPlayers()
 end
 
 -- ESP toggle using Tab:AddToggle method
-miscTab:AddToggle({
+playerTab:AddToggle({
     Name = "ESP",
     Default = false,
     Callback = function(Value)
@@ -103,7 +103,7 @@ miscTab:AddToggle({
 })
 
 -- WalkSpeed slider
-miscTab:AddSlider({
+playerTab:AddSlider({
     Name = "WalkSpeed",
     Min = 0,
     Max = 1000,
@@ -117,7 +117,7 @@ miscTab:AddSlider({
 })
 
 -- JumpPower slider
-miscTab:AddSlider({
+playerTab:AddSlider({
     Name = "JumpPower",
     Min = 0,
     Max = 1000,
@@ -131,7 +131,7 @@ miscTab:AddSlider({
 })
 
 -- Anti-AFK button
-miscTab:AddButton({
+playerTab:AddButton({
     Name = "Anti-AFK",
     Callback = function()
         spawn(function()
@@ -187,6 +187,22 @@ autoFarmTab:AddButton({
                 wait(duration)
             end
         end
+    end
+})
+
+-- Other tab: Infinite Yield button
+otherTab:AddButton({
+    Name = "Infinite Yield",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+    end
+})
+
+-- Other tab: Dex Explorer button
+otherTab:AddButton({
+    Name = "Dex Explorer",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Keyless-mobile-dex-17888"))()
     end
 })
 
