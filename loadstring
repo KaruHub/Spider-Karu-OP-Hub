@@ -19,8 +19,7 @@ local function updateDropdown()
     return items
 end
 
--- Update dropdown every 3 seconds
-local dropdown
+-- Create the dropdown menu once, no updates needed
 teleportTab:AddDropdown({
     Name = "Select Item to Teleport",
     Default = "None",
@@ -33,14 +32,6 @@ teleportTab:AddDropdown({
         end
     end
 })
-
--- Function to update the dropdown every 3 seconds
-spawn(function()
-    while true do
-        wait(3)  -- Wait 3 seconds before updating the dropdown
-        dropdown:UpdateOptions(updateDropdown())  -- Update the dropdown options
-    end
-end)
 
 -- Function to enable no-clip
 local function enableNoClip()
