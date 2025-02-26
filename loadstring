@@ -5,7 +5,7 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
 local window = OrionLib:MakeWindow({Name = "Critic GUI Spider", HidePremium = false})
-local teleportTab = window:MakeTab({Name = "Teleport", Icon = "rbxassetid://6031075938"})
+local teleportTab = window:MakeTab({Name = "Teleports", Icon = "rbxassetid://6031075938"})
 local playerTab = window:MakeTab({Name = "Player", Icon = "rbxassetid://6031075938"})
 local autoFarmTab = window:MakeTab({Name = "AutoFarm", Icon = "rbxassetid://6031075938"})
 local otherTab = window:MakeTab({Name = "Other", Icon = "rbxassetid://6031075938"})
