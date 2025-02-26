@@ -4,7 +4,7 @@ local itemsFolder = game.Workspace:WaitForChild("Items")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
-local window = OrionLib:MakeWindow({Name = "Spider-Karu-OP-Hub", HidePremium = false})
+local window = OrionLib:MakeWindow({Name = "Critic GUI Spider", HidePremium = false})
 local teleportTab = window:MakeTab({Name = "Teleport", Icon = "rbxassetid://6031075938"})
 local playerTab = window:MakeTab({Name = "Player", Icon = "rbxassetid://6031075938"})
 local autoFarmTab = window:MakeTab({Name = "AutoFarm", Icon = "rbxassetid://6031075938"})
